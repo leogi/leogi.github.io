@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Blog Post - Start Bootstrap Template</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/blog-post.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Leogi</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <!-- Blog Post Content Column -->
+            <div class="col-lg-8">
+                <h1>Mẫu thiết kế decorator</h1>
+                <hr>
+                <p>Chắc hẳn các bạn đã từng nghe đến cụm từ Design pattern (Mẫu thiết kế)?
+                Nếu như bạn chưa từng nghe nói đến nó, thì bạn vẫn chưa thực sự trở thành một lập trình viên.</p>
+                <p>Thực ra mình cũng nghe nói đến mẫu thiết kế từ lâu rồi, nhưng do lười học, và trình độ tiếng Anh hạn chế, trong khi tài liệu về mẫu thiết kế hầu hết đều là tiếng Anh, nên mình chưa thực sự hiểu sâu về Mẫu thiết kế.</p>
+                <p>Nhân tiện khoảng thời gian chăm chỉ hiếm hoi, mình học và viết lại để chia sẻ với các bạn về một số mẫu thiết kế thông dụng.Trong phạm vi bài viết này mình sẽ nói về mẫu thiết kế decorator (mẫu trang trí).</p>
+                <p>Nhưng trước tiên, chúng ta cần hiểu rõ mẫu thiết kế là gì?</p>
+                <h2 id="m-u-thi-t-k-design-pattern-l-g-">Mẫu thiết kế (design pattern) là gì?</h2>
+                <p>Mẫu thiết kế - chắc nhiều bạn sẽ cảm thấy thuật ngữ này có vẻ rất trừu tượng, khó hiểu, thiên về học thuật.
+                Nhưng theo ý hiểu của mình, thì mẫu thiết kế đơn giản chỉ là kinh nghiệm, giải pháp giải quyết vấn đề trong lập trình hướng đối tượng.</p>
+                <p>Bạn hãy thử tưởng tượng, bạn có thể xây một căn nhà 2 tầng rất dễ dàng, xây xong tầng 2, nếu bạn thấy tầng 1 không vừa ý, ban có thể làm lại. Nhưng với ngôi nhà hàng trăm tầng thì sao, xây đến tầng 50 bạn mới nhận ra là chiếc móng không đủ để chịu tải cho 100 tầng, bạn có thể đập đi làm lại không?</p>
+                <p>Trong phát triển phần mềm cũng vậy, khi xây dựng hệ thống lớn có đến hàng vạn đối tượng, nếu không có chiến lược xây dựng, hệ thống của bạn sẽ khó có thể chạy tốt được. Vì thế mẫu thiết kế ra đời.</p>
+                <p>Mẫu thiết kế là tinh tuý, kết tinh mà hàng ngàn kĩ sư phần mềm giỏi nhất trên thế giới, trải qua rất nhiều dự án cả thành công lẫn thất bại đã đúc kết lại. Và bây giờ chúng ta chỉ cần học, hiểu và áp dụng vào dự án của mình.</p>
+                <h2 id="decorator-pattern-m-u-thi-t-k-trang-tr-">Decorator pattern (Mẫu thiết kế trang trí)</h2>
+                <p>Giả sử bạn là nhân viên quầy thanh toán của cửa hàng điện máy. Bạn có 1 chiếc máy tính để in ra hoá đơn đơn hàng. Mỗi lần in hoá đơn bạn phải nhập tất cả sản phẩm một lần.</p>
+                <p>Một hôm khách hàng đến mua chiếc máy tính, bạn in ra hoá đơn &quot;Quý khách mua 1 chiếc máy tính&quot;.</p>
+                <p>Hoá đơn vừa in xong, khách hàng đổi ý, muốn mua thêm cái màn hình. Bạn phải huy hoá đơn cũ, in ra hoá đơn mới &quot;Quý khách mua 1 chiếc máy tính và 1 chiếc màn hình&quot;.</p>
+                <p>Bạn vui vẻ đưa hoá đơn cho khách hàng, nhưng khách hàng lạị đổi ý, muốn mua thêm 1 con chuột.</p>
+                <p>Dù không vui, bạn vẫn phải in hoá đơn mới &quot;Quý khách mua 1 chiếc máy tính và 1 chiếc màn hình và một con chuột&quot;.</p>
+                <p>Tưởng chừng như mọi chuyện sẽ dừng lại ở đây, nhưng không, khách hàng muốn mua thêm 1 chiếc bàn phím nữa.
+                Tôi cá là lúc này, bạn đã không còn đủ bình tĩnh để chiều &quot;thượng đế&quot; này nữa.</p>
+                <p>Nhưng bạn vẫn phải in ra hoá đơn &quot;Quý khách mua 1 chiếc máy tính và 1 chiếc màn hình và một con chuột và 1 chiếc bàn phím&quot;.</p>
+                <p>Thực ra khách hàng không có lỗi, mà là lỗi thiết kế của phần mềm in hoá đơn của bạn. Mẫu thiết kế decorator chính là giải pháp giải quyết vấn đề này.</p>
+                <p>Mẫu thiết kế decorator là mẫu thiết kế dùng để mở rộng đối tượng mà không cần thay đổi mã nguồn cũ trong đối tượng. Với nguyên tắc thiết kế &quot;đóng cho việc sửa đổi và mở cho việc mở rộng&quot;.</p>
+                <p>Như vậy khi áp dụng mẫu thiết kế này, mã nguồn của bạn sẽ có tính mềm dẻo, tính mở rộng cao. Bạn có thể thêm mới, mở rộng lớp đối tượng mà không phải thay đổi mã nguồn cũ, sẽ giảm được thời gian kiểm thử.</p>
+                <p>Dưới đây là mã nguồn thực thi mẫu thiết kế decorator viết bằng javascript.</p>
+                <pre class="editor-colors lang-text"><div class="line"><span class="text plain"><span class="meta paragraph text"><span>function&nbsp;DonHang()&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>this.print&nbsp;=&nbsp;function()&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="meta paragraph text"><span>return&nbsp;&quot;Quý&nbsp;khách&nbsp;mua&quot;;</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;</span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>function&nbsp;MayTinh(donhang)&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>var&nbsp;desc&nbsp;=&nbsp;donhang.print();</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>&nbsp;&nbsp;this.print&nbsp;=&nbsp;function()&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="meta paragraph text"><span>return&nbsp;desc&nbsp;+&nbsp;&quot;&nbsp;&quot;&nbsp;+&nbsp;&quot;1&nbsp;chiếc&nbsp;máy&nbsp;tính&quot;;</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;</span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>function&nbsp;ManHinh(donhang)&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>var&nbsp;desc&nbsp;=&nbsp;donhang.print();</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>&nbsp;&nbsp;this.print&nbsp;=&nbsp;function()&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="meta paragraph text"><span>return&nbsp;desc&nbsp;+&nbsp;&quot;&nbsp;&quot;&nbsp;+&nbsp;&quot;và&nbsp;1&nbsp;chiếc&nbsp;màn&nbsp;hình&quot;;</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;</span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>function&nbsp;Chuot(donhang)&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>var&nbsp;desc&nbsp;=&nbsp;donhang.print();</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>&nbsp;&nbsp;this.print&nbsp;=&nbsp;function()&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="meta paragraph text"><span>return&nbsp;desc&nbsp;+&nbsp;&quot;&nbsp;&quot;&nbsp;+&nbsp;&quot;và&nbsp;một&nbsp;con&nbsp;chuột&quot;;</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;</span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>function&nbsp;BanPhim(donhang)&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>var&nbsp;desc&nbsp;=&nbsp;donhang.print();</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>&nbsp;&nbsp;this.print&nbsp;=&nbsp;function()&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="meta paragraph text"><span>return&nbsp;desc&nbsp;+&nbsp;&quot;&nbsp;&quot;&nbsp;+&nbsp;&quot;và&nbsp;một&nbsp;chiếc&nbsp;bàn&nbsp;phím&quot;;</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;</span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>var&nbsp;donhang&nbsp;=&nbsp;new&nbsp;DonHang();</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>donhang&nbsp;=&nbsp;new&nbsp;MayTinh(donhang);</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>donhang&nbsp;=&nbsp;new&nbsp;ManHinh(donhang);</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>donhang&nbsp;=&nbsp;new&nbsp;Chuot(donhang);</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>donhang&nbsp;=&nbsp;new&nbsp;BanPhim(donhang);</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>donhang.print();</span></span></span></div></pre><p>Để đơn giản, bạn hãy hình dung mẫu thiết kế decorator giống như bạn trang trí một món quà. Bạn đặt quà vào hộp, bọc giấy gói quà, viết thiệp và cho vào túi. Bạn đã biến một món đồ thành quà tặng mà không hề động đến món đồ đó. Đấy chính là ý nghĩa của từ decorator (người trang trí).</p>
+                <h2 id="k-t-lu-n">Kết luận</h2>
+                <p>Bạn hãy nhớ nguyên lý: &quot;Mở cho việc mở rộng và đóng cho việc sửa đổi&quot;.</p>
+
+            </div>
+
+            <!-- Blog Sidebar Widgets Column -->
+            <div class="col-md-4">
+
+                <!-- Blog Search Well -->
+<!--                 <div class="well">
+                    <h4>Blog Search</h4>
+                    <div class="input-group">
+                        <input type="text" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                        </span>
+                    </div>
+                </div>
+ -->
+                <!-- Blog Categories Well -->
+                <div class="well">
+                    <h4>Bài viết</h4>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <ul class="list-unstyled">
+                                <li><a href="index.html">Mẫu thiết kế decorator</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                </div>
+
+                <!-- Side Widget Well -->
+<!--                 <div class="well">
+                    <h4>Side Widget Well</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, perspiciatis adipisci accusamus laudantium odit aliquam repellat tempore quos aspernatur vero.</p>
+                </div> -->
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+        <hr>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Biển học vô biên, chỉ có đường tiến, không đường lui</p>
+                </div>
+            </div>
+            <!-- /.row -->
+        </footer>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
