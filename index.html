@@ -23,7 +23,364 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+        .bracket-matcher .region {
+          border-bottom: 1px dotted lime;
+          position: absolute;
+        }
 
+        .spell-check-misspelling .region {
+          border-bottom: 2px dotted rgba(255, 51, 51, 0.75);
+        }
+
+        pre.editor-colors,
+        .host {
+          background-color: #282c34;
+          color: #abb2bf;
+        }
+        pre.editor-colors .line.cursor-line,
+        .host .line.cursor-line {
+          background-color: rgba(153, 187, 255, 0.04);
+        }
+        pre.editor-colors .invisible,
+        .host .invisible {
+          color: #abb2bf;
+        }
+        pre.editor-colors .cursor,
+        .host .cursor {
+          border-left: 2px solid #528bff;
+        }
+        pre.editor-colors .selection .region,
+        .host .selection .region {
+          background-color: #3e4451;
+        }
+        pre.editor-colors .bracket-matcher .region,
+        .host .bracket-matcher .region {
+          border-bottom: 1px solid #528bff;
+          box-sizing: border-box;
+        }
+        pre.editor-colors .invisible-character,
+        .host .invisible-character {
+          color: rgba(171, 178, 191, 0.15);
+        }
+        pre.editor-colors .indent-guide,
+        .host .indent-guide {
+          color: rgba(171, 178, 191, 0.15);
+        }
+        pre.editor-colors .wrap-guide,
+        .host .wrap-guide {
+          background-color: rgba(171, 178, 191, 0.15);
+        }
+        pre.editor-colors .gutter .line-number,
+        .host .gutter .line-number {
+          color: #636d83;
+          -webkit-font-smoothing: antialiased;
+        }
+        pre.editor-colors .gutter .line-number.cursor-line,
+        .host .gutter .line-number.cursor-line {
+          color: #abb2bf;
+          background-color: #2c313a;
+        }
+        pre.editor-colors .gutter .line-number.cursor-line-no-selection,
+        .host .gutter .line-number.cursor-line-no-selection {
+          background-color: transparent;
+        }
+        pre.editor-colors .gutter .line-number .icon-right,
+        .host .gutter .line-number .icon-right {
+          color: #abb2bf;
+        }
+        pre.editor-colors .gutter:not(.git-diff-icon) .line-number.git-line-removed.git-line-removed::before,
+        .host .gutter:not(.git-diff-icon) .line-number.git-line-removed.git-line-removed::before {
+          bottom: -3px;
+        }
+        pre.editor-colors .gutter:not(.git-diff-icon) .line-number.git-line-removed::after,
+        .host .gutter:not(.git-diff-icon) .line-number.git-line-removed::after {
+          content: "";
+          position: absolute;
+          left: 0px;
+          bottom: 0px;
+          width: 25px;
+          border-bottom: 1px dotted rgba(224, 82, 82, 0.5);
+          pointer-events: none;
+        }
+        pre.editor-colors .gutter .line-number.folded,
+        .host .gutter .line-number.folded,
+        pre.editor-colors .gutter .line-number:after,
+        .host .gutter .line-number:after,
+        pre.editor-colors .fold-marker:after,
+        .host .fold-marker:after {
+          color: #abb2bf;
+        }
+        .comment {
+          color: #5c6370;
+          font-style: italic;
+        }
+        .entity.name.type {
+          color: #e5c07b;
+        }
+        .entity.other.inherited-class {
+          color: #98c379;
+        }
+        .keyword {
+          color: #c678dd;
+        }
+        .keyword.control {
+          color: #c678dd;
+        }
+        .keyword.operator {
+          color: #abb2bf;
+        }
+        .keyword.other.special-method {
+          color: #61afef;
+        }
+        .keyword.other.unit {
+          color: #d19a66;
+        }
+        .storage {
+          color: #c678dd;
+        }
+        .storage.type.annotation,
+        .storage.type.primitive {
+          color: #c678dd;
+        }
+        .storage.modifier.package,
+        .storage.modifier.import {
+          color: #abb2bf;
+        }
+        .constant {
+          color: #d19a66;
+        }
+        .constant.variable {
+          color: #d19a66;
+        }
+        .constant.character.escape {
+          color: #56b6c2;
+        }
+        .constant.numeric {
+          color: #d19a66;
+        }
+        .constant.other.color {
+          color: #56b6c2;
+        }
+        .constant.other.symbol {
+          color: #56b6c2;
+        }
+        .variable {
+          color: #e06c75;
+        }
+        .variable.interpolation {
+          color: #be5046;
+        }
+        .variable.parameter {
+          color: #abb2bf;
+        }
+        .string {
+          color: #98c379;
+        }
+        .string.regexp {
+          color: #56b6c2;
+        }
+        .string.regexp .source.ruby.embedded {
+          color: #e5c07b;
+        }
+        .string.other.link {
+          color: #e06c75;
+        }
+        .punctuation.definition.comment {
+          color: #5c6370;
+        }
+        .punctuation.definition.method-parameters,
+        .punctuation.definition.function-parameters,
+        .punctuation.definition.parameters,
+        .punctuation.definition.separator,
+        .punctuation.definition.seperator,
+        .punctuation.definition.array {
+          color: #abb2bf;
+        }
+        .punctuation.definition.heading,
+        .punctuation.definition.identity {
+          color: #61afef;
+        }
+        .punctuation.definition.bold {
+          color: #e5c07b;
+          font-weight: bold;
+        }
+        .punctuation.definition.italic {
+          color: #c678dd;
+          font-style: italic;
+        }
+        .punctuation.section.embedded {
+          color: #be5046;
+        }
+        .punctuation.section.method,
+        .punctuation.section.class,
+        .punctuation.section.inner-class {
+          color: #abb2bf;
+        }
+        .support.class {
+          color: #e5c07b;
+        }
+        .support.type {
+          color: #56b6c2;
+        }
+        .support.function {
+          color: #56b6c2;
+        }
+        .support.function.any-method {
+          color: #61afef;
+        }
+        .entity.name.function {
+          color: #61afef;
+        }
+        .entity.name.class,
+        .entity.name.type.class {
+          color: #e5c07b;
+        }
+        .entity.name.section {
+          color: #61afef;
+        }
+        .entity.name.tag {
+          color: #e06c75;
+        }
+        .entity.other.attribute-name {
+          color: #d19a66;
+        }
+        .entity.other.attribute-name.id {
+          color: #61afef;
+        }
+        .meta.class {
+          color: #e5c07b;
+        }
+        .meta.class.body {
+          color: #abb2bf;
+        }
+        .meta.method-call,
+        .meta.method {
+          color: #abb2bf;
+        }
+        .meta.definition.variable {
+          color: #e06c75;
+        }
+        .meta.link {
+          color: #d19a66;
+        }
+        .meta.require {
+          color: #61afef;
+        }
+        .meta.selector {
+          color: #c678dd;
+        }
+        .meta.separator {
+          background-color: #373b41;
+          color: #abb2bf;
+        }
+        .meta.tag {
+          color: #abb2bf;
+        }
+        .none {
+          color: #abb2bf;
+        }
+        .invalid.deprecated {
+          color: #523d14 !important;
+          background-color: #e0c285 !important;
+        }
+        .invalid.illegal {
+          color: #ffffff !important;
+          background-color: #e05252 !important;
+        }
+        .markup.bold {
+          color: #d19a66;
+          font-weight: bold;
+        }
+        .markup.changed {
+          color: #c678dd;
+        }
+        .markup.deleted {
+          color: #e06c75;
+        }
+        .markup.italic {
+          color: #c678dd;
+          font-style: italic;
+        }
+        .markup.heading .punctuation.definition.heading {
+          color: #61afef;
+        }
+        .markup.inserted {
+          color: #98c379;
+        }
+        .markup.list {
+          color: #e06c75;
+        }
+        .markup.quote {
+          color: #d19a66;
+        }
+        .markup.raw {
+          color: #98c379;
+        }
+        .source.cs .keyword.operator {
+          color: #c678dd;
+        }
+        .source.css .property-name,
+        .source.css .property-value {
+          color: #828997;
+        }
+        .source.css .property-name.support,
+        .source.css .property-value.support {
+          color: #abb2bf;
+        }
+        .source.gfm .markup {
+          -webkit-font-smoothing: auto;
+        }
+        .source.gfm .markup.heading {
+          color: #e06c75;
+        }
+        .source.gfm .markup.link {
+          color: #c678dd;
+        }
+        .source.gfm .link .entity {
+          color: #61afef;
+        }
+        .source.ini .keyword.other.definition.ini {
+          color: #e06c75;
+        }
+        .source.java .storage.modifier.import {
+          color: #e5c07b;
+        }
+        .source.java .storage.type {
+          color: #e5c07b;
+        }
+        .source.java-properties .meta.key-pair {
+          color: #e06c75;
+        }
+        .source.java-properties .meta.key-pair > .punctuation {
+          color: #abb2bf;
+        }
+        .source.json .meta.structure.dictionary.json > .string.quoted.json {
+          color: #e06c75;
+        }
+        .source.json .meta.structure.dictionary.json > .string.quoted.json > .punctuation.string {
+          color: #e06c75;
+        }
+        .source.json .meta.structure.dictionary.json > .value.json > .string.quoted.json,
+        .source.json .meta.structure.array.json > .value.json > .string.quoted.json,
+        .source.json .meta.structure.dictionary.json > .value.json > .string.quoted.json > .punctuation,
+        .source.json .meta.structure.array.json > .value.json > .string.quoted.json > .punctuation {
+          color: #98c379;
+        }
+        .source.json .meta.structure.dictionary.json > .constant.language.json,
+        .source.json .meta.structure.array.json > .constant.language.json {
+          color: #56b6c2;
+        }
+        .source.ruby .constant.other.symbol > .punctuation {
+          color: inherit;
+        }
+        .source.python .keyword.operator.logical.python {
+          color: #c678dd;
+        }
+        .source.python .variable.parameter {
+          color: #d19a66;
+        }
+    </style>
 </head>
 
 <body>
@@ -65,13 +422,13 @@
                 <p>Thực ra mình cũng nghe nói đến mẫu thiết kế từ lâu rồi, nhưng do lười học, và trình độ tiếng Anh hạn chế, trong khi tài liệu về mẫu thiết kế hầu hết đều là tiếng Anh, nên mình chưa thực sự hiểu sâu về Mẫu thiết kế.</p>
                 <p>Nhân tiện khoảng thời gian chăm chỉ hiếm hoi, mình học và viết lại để chia sẻ với các bạn về một số mẫu thiết kế thông dụng.Trong phạm vi bài viết này mình sẽ nói về mẫu thiết kế decorator (mẫu trang trí).</p>
                 <p>Nhưng trước tiên, chúng ta cần hiểu rõ mẫu thiết kế là gì?</p>
-                <h2 id="m-u-thi-t-k-design-pattern-l-g-">Mẫu thiết kế (design pattern) là gì?</h2>
+                <h1 id="m-u-thi-t-k-design-pattern-l-g-">Mẫu thiết kế (design pattern) là gì?</h1>
                 <p>Mẫu thiết kế - chắc nhiều bạn sẽ cảm thấy thuật ngữ này có vẻ rất trừu tượng, khó hiểu, thiên về học thuật.
                 Nhưng theo ý hiểu của mình, thì mẫu thiết kế đơn giản chỉ là kinh nghiệm, giải pháp giải quyết vấn đề trong lập trình hướng đối tượng.</p>
                 <p>Bạn hãy thử tưởng tượng, bạn có thể xây một căn nhà 2 tầng rất dễ dàng, xây xong tầng 2, nếu bạn thấy tầng 1 không vừa ý, ban có thể làm lại. Nhưng với ngôi nhà hàng trăm tầng thì sao, xây đến tầng 50 bạn mới nhận ra là chiếc móng không đủ để chịu tải cho 100 tầng, bạn có thể đập đi làm lại không?</p>
                 <p>Trong phát triển phần mềm cũng vậy, khi xây dựng hệ thống lớn có đến hàng vạn đối tượng, nếu không có chiến lược xây dựng, hệ thống của bạn sẽ khó có thể chạy tốt được. Vì thế mẫu thiết kế ra đời.</p>
                 <p>Mẫu thiết kế là tinh tuý, kết tinh mà hàng ngàn kĩ sư phần mềm giỏi nhất trên thế giới, trải qua rất nhiều dự án cả thành công lẫn thất bại đã đúc kết lại. Và bây giờ chúng ta chỉ cần học, hiểu và áp dụng vào dự án của mình.</p>
-                <h2 id="decorator-pattern-m-u-thi-t-k-trang-tr-">Decorator pattern (Mẫu thiết kế trang trí)</h2>
+                <h1 id="decorator-pattern-m-u-thi-t-k-trang-tr-">Decorator pattern (Mẫu thiết kế trang trí)</h1>
                 <p>Giả sử bạn là nhân viên quầy thanh toán của cửa hàng điện máy. Bạn có 1 chiếc máy tính để in ra hoá đơn đơn hàng. Mỗi lần in hoá đơn bạn phải nhập tất cả sản phẩm một lần.</p>
                 <p>Một hôm khách hàng đến mua chiếc máy tính, bạn in ra hoá đơn &quot;Quý khách mua 1 chiếc máy tính&quot;.</p>
                 <p>Hoá đơn vừa in xong, khách hàng đổi ý, muốn mua thêm cái màn hình. Bạn phải huy hoá đơn cũ, in ra hoá đơn mới &quot;Quý khách mua 1 chiếc máy tính và 1 chiếc màn hình&quot;.</p>
@@ -84,8 +441,9 @@
                 <p>Mẫu thiết kế decorator là mẫu thiết kế dùng để mở rộng đối tượng mà không cần thay đổi mã nguồn cũ trong đối tượng. Với nguyên tắc thiết kế &quot;đóng cho việc sửa đổi và mở cho việc mở rộng&quot;.</p>
                 <p>Như vậy khi áp dụng mẫu thiết kế này, mã nguồn của bạn sẽ có tính mềm dẻo, tính mở rộng cao. Bạn có thể thêm mới, mở rộng lớp đối tượng mà không phải thay đổi mã nguồn cũ, sẽ giảm được thời gian kiểm thử.</p>
                 <p>Dưới đây là mã nguồn thực thi mẫu thiết kế decorator viết bằng javascript.</p>
-                <pre class="editor-colors lang-text"><div class="line"><span class="text plain"><span class="meta paragraph text"><span>function&nbsp;DonHang()&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>this.print&nbsp;=&nbsp;function()&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="meta paragraph text"><span>return&nbsp;&quot;Quý&nbsp;khách&nbsp;mua&quot;;</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;</span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>function&nbsp;MayTinh(donhang)&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>var&nbsp;desc&nbsp;=&nbsp;donhang.print();</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>&nbsp;&nbsp;this.print&nbsp;=&nbsp;function()&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="meta paragraph text"><span>return&nbsp;desc&nbsp;+&nbsp;&quot;&nbsp;&quot;&nbsp;+&nbsp;&quot;1&nbsp;chiếc&nbsp;máy&nbsp;tính&quot;;</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;</span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>function&nbsp;ManHinh(donhang)&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>var&nbsp;desc&nbsp;=&nbsp;donhang.print();</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>&nbsp;&nbsp;this.print&nbsp;=&nbsp;function()&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="meta paragraph text"><span>return&nbsp;desc&nbsp;+&nbsp;&quot;&nbsp;&quot;&nbsp;+&nbsp;&quot;và&nbsp;1&nbsp;chiếc&nbsp;màn&nbsp;hình&quot;;</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;</span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>function&nbsp;Chuot(donhang)&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>var&nbsp;desc&nbsp;=&nbsp;donhang.print();</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>&nbsp;&nbsp;this.print&nbsp;=&nbsp;function()&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="meta paragraph text"><span>return&nbsp;desc&nbsp;+&nbsp;&quot;&nbsp;&quot;&nbsp;+&nbsp;&quot;và&nbsp;một&nbsp;con&nbsp;chuột&quot;;</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;</span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>function&nbsp;BanPhim(donhang)&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>var&nbsp;desc&nbsp;=&nbsp;donhang.print();</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>&nbsp;&nbsp;this.print&nbsp;=&nbsp;function()&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="meta paragraph text"><span>return&nbsp;desc&nbsp;+&nbsp;&quot;&nbsp;&quot;&nbsp;+&nbsp;&quot;và&nbsp;một&nbsp;chiếc&nbsp;bàn&nbsp;phím&quot;;</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;</span><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>}</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;</span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>var&nbsp;donhang&nbsp;=&nbsp;new&nbsp;DonHang();</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>donhang&nbsp;=&nbsp;new&nbsp;MayTinh(donhang);</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>donhang&nbsp;=&nbsp;new&nbsp;ManHinh(donhang);</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>donhang&nbsp;=&nbsp;new&nbsp;Chuot(donhang);</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>donhang&nbsp;=&nbsp;new&nbsp;BanPhim(donhang);</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>donhang.print();</span></span></span></div></pre><p>Để đơn giản, bạn hãy hình dung mẫu thiết kế decorator giống như bạn trang trí một món quà. Bạn đặt quà vào hộp, bọc giấy gói quà, viết thiệp và cho vào túi. Bạn đã biến một món đồ thành quà tặng mà không hề động đến món đồ đó. Đấy chính là ý nghĩa của từ decorator (người trang trí).</p>
-                <h2 id="k-t-lu-n">Kết luận</h2>
+                <pre class="editor-colors lang-javascript"><div class="line"><span class="source js"><span class="meta function js"><span class="storage type function js"><span>function</span></span><span>&nbsp;</span><span class="entity name function js"><span>DonHang</span></span><span class="punctuation definition parameters begin js"><span>(</span></span><span class="punctuation definition parameters end js"><span>)</span></span></span><span>&nbsp;</span><span class="meta brace curly js"><span>{</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="meta function js"><span class="support class js"><span>this</span></span><span>.</span><span class="entity name function js"><span>print</span></span><span>&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;</span><span class="storage type function js"><span>function</span></span><span class="punctuation definition parameters begin js"><span>(</span></span><span class="punctuation definition parameters end js"><span>)</span></span></span><span>&nbsp;</span><span class="meta brace curly js"><span>{</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control js"><span>return</span></span><span>&nbsp;</span><span class="string quoted double js"><span class="punctuation definition string begin js"><span>&quot;</span></span><span>Quý&nbsp;khách&nbsp;mua</span><span class="punctuation definition string end js"><span>&quot;</span></span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="meta brace curly js"><span>}</span></span></span></div><div class="line"><span class="source js"><span class="meta brace curly js"><span>}</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;</span></span></div><div class="line"><span class="source js"><span class="meta function js"><span class="storage type function js"><span>function</span></span><span>&nbsp;</span><span class="entity name function js"><span>MayTinh</span></span><span class="punctuation definition parameters begin js"><span>(</span></span><span class="variable parameter function js"><span>donhang</span></span><span class="punctuation definition parameters end js"><span>)</span></span></span><span>&nbsp;</span><span class="meta brace curly js"><span>{</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="storage modifier js"><span>var</span></span><span>&nbsp;desc&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;donhang</span><span class="meta delimiter method period js"><span>.</span></span><span class="support function js"><span>print</span></span><span class="meta brace round js"><span>(</span><span>)</span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="meta function js"><span class="support class js"><span>this</span></span><span>.</span><span class="entity name function js"><span>print</span></span><span>&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;</span><span class="storage type function js"><span>function</span></span><span class="punctuation definition parameters begin js"><span>(</span></span><span class="punctuation definition parameters end js"><span>)</span></span></span><span>&nbsp;</span><span class="meta brace curly js"><span>{</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control js"><span>return</span></span><span>&nbsp;desc&nbsp;</span><span class="keyword operator js"><span>+</span></span><span>&nbsp;</span><span class="string quoted double js"><span class="punctuation definition string begin js"><span>&quot;</span></span><span>&nbsp;</span><span class="punctuation definition string end js"><span>&quot;</span></span></span><span>&nbsp;</span><span class="keyword operator js"><span>+</span></span><span>&nbsp;</span><span class="string quoted double js"><span class="punctuation definition string begin js"><span>&quot;</span></span><span>1&nbsp;chiếc&nbsp;máy&nbsp;tính</span><span class="punctuation definition string end js"><span>&quot;</span></span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="meta brace curly js"><span>}</span></span></span></div><div class="line"><span class="source js"><span class="meta brace curly js"><span>}</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;</span></span></div><div class="line"><span class="source js"><span class="meta function js"><span class="storage type function js"><span>function</span></span><span>&nbsp;</span><span class="entity name function js"><span>ManHinh</span></span><span class="punctuation definition parameters begin js"><span>(</span></span><span class="variable parameter function js"><span>donhang</span></span><span class="punctuation definition parameters end js"><span>)</span></span></span><span>&nbsp;</span><span class="meta brace curly js"><span>{</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="storage modifier js"><span>var</span></span><span>&nbsp;desc&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;donhang</span><span class="meta delimiter method period js"><span>.</span></span><span class="support function js"><span>print</span></span><span class="meta brace round js"><span>(</span><span>)</span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="meta function js"><span class="support class js"><span>this</span></span><span>.</span><span class="entity name function js"><span>print</span></span><span>&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;</span><span class="storage type function js"><span>function</span></span><span class="punctuation definition parameters begin js"><span>(</span></span><span class="punctuation definition parameters end js"><span>)</span></span></span><span>&nbsp;</span><span class="meta brace curly js"><span>{</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control js"><span>return</span></span><span>&nbsp;desc&nbsp;</span><span class="keyword operator js"><span>+</span></span><span>&nbsp;</span><span class="string quoted double js"><span class="punctuation definition string begin js"><span>&quot;</span></span><span>&nbsp;</span><span class="punctuation definition string end js"><span>&quot;</span></span></span><span>&nbsp;</span><span class="keyword operator js"><span>+</span></span><span>&nbsp;</span><span class="string quoted double js"><span class="punctuation definition string begin js"><span>&quot;</span></span><span>và&nbsp;1&nbsp;chiếc&nbsp;màn&nbsp;hình</span><span class="punctuation definition string end js"><span>&quot;</span></span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="meta brace curly js"><span>}</span></span></span></div><div class="line"><span class="source js"><span class="meta brace curly js"><span>}</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;</span></span></div><div class="line"><span class="source js"><span class="meta function js"><span class="storage type function js"><span>function</span></span><span>&nbsp;</span><span class="entity name function js"><span>Chuot</span></span><span class="punctuation definition parameters begin js"><span>(</span></span><span class="variable parameter function js"><span>donhang</span></span><span class="punctuation definition parameters end js"><span>)</span></span></span><span>&nbsp;</span><span class="meta brace curly js"><span>{</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="storage modifier js"><span>var</span></span><span>&nbsp;desc&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;donhang</span><span class="meta delimiter method period js"><span>.</span></span><span class="support function js"><span>print</span></span><span class="meta brace round js"><span>(</span><span>)</span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="meta function js"><span class="support class js"><span>this</span></span><span>.</span><span class="entity name function js"><span>print</span></span><span>&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;</span><span class="storage type function js"><span>function</span></span><span class="punctuation definition parameters begin js"><span>(</span></span><span class="punctuation definition parameters end js"><span>)</span></span></span><span>&nbsp;</span><span class="meta brace curly js"><span>{</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control js"><span>return</span></span><span>&nbsp;desc&nbsp;</span><span class="keyword operator js"><span>+</span></span><span>&nbsp;</span><span class="string quoted double js"><span class="punctuation definition string begin js"><span>&quot;</span></span><span>&nbsp;</span><span class="punctuation definition string end js"><span>&quot;</span></span></span><span>&nbsp;</span><span class="keyword operator js"><span>+</span></span><span>&nbsp;</span><span class="string quoted double js"><span class="punctuation definition string begin js"><span>&quot;</span></span><span>và&nbsp;một&nbsp;con&nbsp;chuột</span><span class="punctuation definition string end js"><span>&quot;</span></span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="meta brace curly js"><span>}</span></span></span></div><div class="line"><span class="source js"><span class="meta brace curly js"><span>}</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;</span></span></div><div class="line"><span class="source js"><span class="meta function js"><span class="storage type function js"><span>function</span></span><span>&nbsp;</span><span class="entity name function js"><span>BanPhim</span></span><span class="punctuation definition parameters begin js"><span>(</span></span><span class="variable parameter function js"><span>donhang</span></span><span class="punctuation definition parameters end js"><span>)</span></span></span><span>&nbsp;</span><span class="meta brace curly js"><span>{</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="storage modifier js"><span>var</span></span><span>&nbsp;desc&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;donhang</span><span class="meta delimiter method period js"><span>.</span></span><span class="support function js"><span>print</span></span><span class="meta brace round js"><span>(</span><span>)</span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="meta function js"><span class="support class js"><span>this</span></span><span>.</span><span class="entity name function js"><span>print</span></span><span>&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;</span><span class="storage type function js"><span>function</span></span><span class="punctuation definition parameters begin js"><span>(</span></span><span class="punctuation definition parameters end js"><span>)</span></span></span><span>&nbsp;</span><span class="meta brace curly js"><span>{</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword control js"><span>return</span></span><span>&nbsp;desc&nbsp;</span><span class="keyword operator js"><span>+</span></span><span>&nbsp;</span><span class="string quoted double js"><span class="punctuation definition string begin js"><span>&quot;</span></span><span>&nbsp;</span><span class="punctuation definition string end js"><span>&quot;</span></span></span><span>&nbsp;</span><span class="keyword operator js"><span>+</span></span><span>&nbsp;</span><span class="string quoted double js"><span class="punctuation definition string begin js"><span>&quot;</span></span><span>và&nbsp;một&nbsp;chiếc&nbsp;bàn&nbsp;phím</span><span class="punctuation definition string end js"><span>&quot;</span></span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;&nbsp;</span><span class="meta brace curly js"><span>}</span></span></span></div><div class="line"><span class="source js"><span class="meta brace curly js"><span>}</span></span></span></div><div class="line"><span class="source js"><span>&nbsp;</span></span></div><div class="line"><span class="source js"><span class="storage modifier js"><span>var</span></span><span>&nbsp;donhang&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;</span><span class="meta class instance constructor"><span class="keyword operator new js"><span>new</span></span><span>&nbsp;</span><span class="entity name type instance js"><span>DonHang</span></span></span><span class="meta brace round js"><span>(</span><span>)</span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>donhang&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;</span><span class="meta class instance constructor"><span class="keyword operator new js"><span>new</span></span><span>&nbsp;</span><span class="entity name type instance js"><span>MayTinh</span></span></span><span class="meta brace round js"><span>(</span></span><span>donhang</span><span class="meta brace round js"><span>)</span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>donhang&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;</span><span class="meta class instance constructor"><span class="keyword operator new js"><span>new</span></span><span>&nbsp;</span><span class="entity name type instance js"><span>ManHinh</span></span></span><span class="meta brace round js"><span>(</span></span><span>donhang</span><span class="meta brace round js"><span>)</span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>donhang&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;</span><span class="meta class instance constructor"><span class="keyword operator new js"><span>new</span></span><span>&nbsp;</span><span class="entity name type instance js"><span>Chuot</span></span></span><span class="meta brace round js"><span>(</span></span><span>donhang</span><span class="meta brace round js"><span>)</span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>donhang&nbsp;</span><span class="keyword operator js"><span>=</span></span><span>&nbsp;</span><span class="meta class instance constructor"><span class="keyword operator new js"><span>new</span></span><span>&nbsp;</span><span class="entity name type instance js"><span>BanPhim</span></span></span><span class="meta brace round js"><span>(</span></span><span>donhang</span><span class="meta brace round js"><span>)</span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div><div class="line"><span class="source js"><span>donhang</span><span class="meta delimiter method period js"><span>.</span></span><span class="support function js"><span>print</span></span><span class="meta brace round js"><span>(</span><span>)</span></span><span class="punctuation terminator statement js"><span>;</span></span></span></div></pre>
+                <p>Để đơn giản, bạn hãy hình dung mẫu thiết kế decorator giống như bạn trang trí một món quà. Bạn đặt quà vào hộp, bọc giấy gói quà, viết thiệp và cho vào túi. Bạn đã biến một món đồ thành quà tặng mà không hề động đến món đồ đó. Đấy chính là ý nghĩa của từ decorator (người trang trí).</p>
+                <h1 id="k-t-lu-n">Kết luận</h1>
                 <p>Bạn hãy nhớ nguyên lý: &quot;Mở cho việc mở rộng và đóng cho việc sửa đổi&quot;.</p>
 
             </div>
